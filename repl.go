@@ -3,20 +3,19 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"internal/pokedexapi"
 	"os"
 	"strings"
-
-	"www.github.com/rishprsi/PokedexAPI"
 )
 
 type config struct {
 	Next   string
 	Prev   string
-	client *PokedexAPI.Client
+	client *pokedexapi.Client
 }
 
 func runRepl() {
-	client := PokedexAPI.PokedexClient()
+	client := pokedexapi.PokedexClient()
 	state := config{
 		Next:   "",
 		Prev:   "",

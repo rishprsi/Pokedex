@@ -2,8 +2,7 @@ package main
 
 import (
 	"fmt"
-
-	"www.github.com/rishprsi/PokedexAPI"
+	"internal/pokedexapi"
 )
 
 func commandMap(state *config) error {
@@ -11,10 +10,13 @@ func commandMap(state *config) error {
 		state.Next = "https://pokeapi.co/api/v2/location-area/"
 	}
 
-	var areaStruct PokedexAPI.LocationAreaList
-	areaStruct = state.client.ListLocationAreas()
+	var areaStruct pokedexapi.LocationAreaList
+	areaStruct, err := state.client.ListLocationAreas(state.Next)
+	if err != nil {
+		return err
+	}
 	for _, area := range areaStruct.LocationList {
-		fmt.Println(area.name)
+		fmt.Println(area.Name)
 	}
 	state.Next = areaStruct.Next
 	state.Prev = areaStruct.Prev
@@ -25,11 +27,15 @@ func commandMap(state *config) error {
 func commandMapb(state *config) error {
 	if state.Prev == "" {
 		fmt.Println("You're on the first page")
+		return nil
 	}
-	var areaStruct PokedexAPI.LocationAreaList
-	areaStruct = state.client.ListLocationAreas()
+	var areaStruct pokedexapi.LocationAreaList
+	areaStruct, err := state.client.ListLocationAreas(state.Prev)
+	if err != nil {
+		return err
+	}
 	for _, area := range areaStruct.LocationList {
-		fmt.Println(area.name)
+		fmt.Println(area.Name)
 	}
 	state.Next = areaStruct.Next
 	state.Prev = areaStruct.Prev

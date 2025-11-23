@@ -1,0 +1,18 @@
+mode: set
+Pokedex/command_exit.go:8.26,12.2 3 0
+Pokedex/command_help.go:7.26,10.42 3 0
+Pokedex/command_help.go:10.42,13.3 1 0
+Pokedex/command_help.go:15.2,15.12 1 0
+Pokedex/command_map.go:3.25,5.2 1 0
+Pokedex/commands.go:11.43,31.2 3 1
+Pokedex/main.go:3.13,5.2 1 0
+Pokedex/repl.go:10.16,13.6 3 0
+Pokedex/repl.go:13.6,18.30 5 0
+Pokedex/repl.go:18.30,19.54 1 0
+Pokedex/repl.go:19.54,21.19 2 0
+Pokedex/repl.go:21.19,23.6 1 0
+Pokedex/repl.go:24.10,26.5 1 0
+Pokedex/repl.go:27.9,29.4 1 0
+Pokedex/repl.go:33.39,36.39 3 1
+Pokedex/repl.go:36.39,38.3 1 1
+Pokedex/repl.go:39.2,39.21 1 1

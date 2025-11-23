@@ -1,15 +1,13 @@
 package main
 
-import (
-	"fmt"
-	"os"
+type (
+	Callback   func(*config) error
+	cliCommand struct {
+		name        string
+		description string
+		callback    Callback
+	}
 )
-
-type cliCommand struct {
-	name        string
-	description string
-	callback    func() error
-}
 
 var packageCommands map[string]cliCommand
 
@@ -25,24 +23,17 @@ func initCommands() map[string]cliCommand {
 			description: "Provides all the commands and their usage for the Pokedex",
 			callback:    commandHelp,
 		},
+		"map": {
+			name:        "map",
+			description: "Provides the next 20 location areas in Pokemon world",
+			callback:    commandMap,
+		},
+		"mapb": {
+			name:        "map",
+			description: "Provides the next 20 location areas in Pokemon world",
+			callback:    commandMapb,
+		},
 	}
 	packageCommands = commands
 	return commands
-}
-
-func commandExit() error {
-	fmt.Println("Closing the Pokedex... Goodbye!")
-	defer os.Exit(0)
-	return nil
-}
-
-func commandHelp() error {
-	fmt.Println("Welcome to the Pokedex!")
-	fmt.Println("")
-	for _, command := range packageCommands {
-		// use := command.name + ": " + command.description
-		fmt.Printf("%s: %s\n", command.name, command.description)
-	}
-
-	return nil
 }

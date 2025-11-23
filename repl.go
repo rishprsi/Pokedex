@@ -5,9 +5,23 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"www.github.com/rishprsi/PokedexAPI"
 )
 
+type config struct {
+	Next   string
+	Prev   string
+	client *PokedexAPI.Client
+}
+
 func runRepl() {
+	client := PokedexAPI.PokedexClient()
+	state := config{
+		Next:   "",
+		Prev:   "",
+		client: client,
+	}
 	scanner := bufio.NewScanner(os.Stdin)
 	commands := initCommands()
 	for {
@@ -17,7 +31,7 @@ func runRepl() {
 		userInputArray := cleanInput(userInput)
 		if len(userInputArray) > 0 {
 			if command, ok := commands[userInputArray[0]]; ok {
-				err := command.callback()
+				err := command.callback(&state)
 				if err != nil {
 					fmt.Println("Invalid command usage")
 				}

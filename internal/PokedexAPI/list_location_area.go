@@ -2,9 +2,9 @@ package pokedexapi
 
 import (
 	// "context"
-	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 )
 
 type LocationArea struct {
@@ -18,19 +18,17 @@ type LocationAreaList struct {
 	LocationList []LocationArea `json:"results"`
 }
 
-func (c *Client) ListLocationAreas(url string) (LocationAreaList, error) {
+func (c *Client) ListLocationAreas(url string) ([]byte, error) {
 	res, err := c.http.Get(url)
 	if err != nil {
 		errStr := fmt.Sprintf("ListLocationAreas failed with: %v", err)
-		return LocationAreaList{}, errors.New(errStr)
+		return []byte{}, errors.New(errStr)
 	}
 
-	decoder := json.NewDecoder(res.Body)
-	var result LocationAreaList
-	err = decoder.Decode(&result)
+	result, err := io.ReadAll(res.Body)
 	if err != nil {
 		errStr := fmt.Sprintf("ListLocationAreas failed with: %v", err)
-		return LocationAreaList{}, errors.New(errStr)
+		return []byte{}, errors.New(errStr)
 	}
 
 	return result, nil

@@ -11,7 +11,7 @@ func commandMap(state *config) error {
 	}
 
 	var areaStruct pokedexapi.LocationAreaList
-	areaStruct, err := state.client.ListLocationAreas(state.Next)
+	areaStruct, err := cacheHit(state, state.Next)
 	if err != nil {
 		return err
 	}
@@ -29,8 +29,7 @@ func commandMapb(state *config) error {
 		fmt.Println("You're on the first page")
 		return nil
 	}
-	var areaStruct pokedexapi.LocationAreaList
-	areaStruct, err := state.client.ListLocationAreas(state.Prev)
+	areaStruct, err := cacheHit(state, state.Prev)
 	if err != nil {
 		return err
 	}

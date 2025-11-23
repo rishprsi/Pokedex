@@ -3,23 +3,28 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"internal/pokecache"
 	"internal/pokedexapi"
 	"os"
 	"strings"
+	"time"
 )
 
 type config struct {
 	Next   string
 	Prev   string
 	client *pokedexapi.Client
+	cache  *pokecache.Cache
 }
 
 func runRepl() {
 	client := pokedexapi.PokedexClient()
+	cache := pokecache.NewCache(time.Duration(60 * time.Second))
 	state := config{
 		Next:   "",
 		Prev:   "",
 		client: client,
+		cache:  cache,
 	}
 	scanner := bufio.NewScanner(os.Stdin)
 	commands := initCommands()

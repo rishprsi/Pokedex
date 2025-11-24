@@ -7,18 +7,7 @@ import (
 	"io"
 )
 
-type LocationArea struct {
-	Name string `json:"name"`
-	URL  string `json:"url"`
-}
-
-type LocationAreaList struct {
-	Prev         string         `json:"previous"`
-	Next         string         `json:"next"`
-	LocationList []LocationArea `json:"results"`
-}
-
-func (c *Client) ListLocationAreas(url string) ([]byte, error) {
+func (c *Client) PokeApiCall(url string) ([]byte, error) {
 	res, err := c.http.Get(url)
 	if err != nil {
 		errStr := fmt.Sprintf("ListLocationAreas failed with: %v", err)

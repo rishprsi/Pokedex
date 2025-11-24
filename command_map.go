@@ -1,20 +1,37 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
-	"internal/pokedexapi"
 )
 
-func commandMap(state *config) error {
-	if state.Next == "" {
-		state.Next = "https://pokeapi.co/api/v2/location-area/"
-	}
+type LocationArea struct {
+	Name string `json:"name"`
+	URL  string `json:"url"`
+}
 
-	var areaStruct pokedexapi.LocationAreaList
-	areaStruct, err := cacheHit(state, state.Next)
+type LocationAreaList struct {
+	Prev         string         `json:"previous"`
+	Next         string         `json:"next"`
+	LocationList []LocationArea `json:"results"`
+}
+
+func commandMap(state *config, args []string) error {
+	if state.Next == "" {
+		state.Next = state.BaseURL + "location-area/"
+	}
+	state.Page += 1
+
+	body, err := cacheHit(state, state.Next)
 	if err != nil {
 		return err
 	}
+
+	areaStruct, err := byteToList(body)
+	if err != nil {
+		return err
+	}
+	fmt.Println("\nOn Page:", state.Page, "\n")
 	for _, area := range areaStruct.LocationList {
 		fmt.Println(area.Name)
 	}
@@ -24,15 +41,25 @@ func commandMap(state *config) error {
 	return nil
 }
 
-func commandMapb(state *config) error {
+func commandMapb(state *config, args []string) error {
 	if state.Prev == "" {
 		fmt.Println("You're on the first page")
 		return nil
 	}
-	areaStruct, err := cacheHit(state, state.Prev)
+
+	state.Page -= 1
+
+	body, err := cacheHit(state, state.Prev)
 	if err != nil {
 		return err
 	}
+
+	areaStruct, err := byteToList(body)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println("\nOn Page:", state.Page, "\n")
 	for _, area := range areaStruct.LocationList {
 		fmt.Println(area.Name)
 	}
@@ -40,4 +67,13 @@ func commandMapb(state *config) error {
 	state.Prev = areaStruct.Prev
 
 	return nil
+}
+
+func byteToList(body []byte) (LocationAreaList, error) {
+	var locations LocationAreaList
+	err := json.Unmarshal(body, &locations)
+	if err != nil {
+		return LocationAreaList{}, err
+	}
+	return locations, nil
 }

@@ -1,30 +1,16 @@
 package main
 
-import (
-	"encoding/json"
-	"internal/pokedexapi"
-)
-
-func cacheHit(state *config, url string) (pokedexapi.LocationAreaList, error) {
+func cacheHit(state *config, url string) ([]byte, error) {
 	val, ok := state.cache.Get(url)
 	if !ok {
-		apiVal, err := state.client.ListLocationAreas(url)
+		apiVal, err := state.client.PokeApiCall(url)
 		if err != nil {
-			return pokedexapi.LocationAreaList{}, err
+			return []byte{}, err
 		}
 		state.cache.Add(url, apiVal)
-		return byteToList(apiVal)
+		return apiVal, nil
 
 	} else {
-		return byteToList(val)
+		return val, nil
 	}
-}
-
-func byteToList(body []byte) (pokedexapi.LocationAreaList, error) {
-	var locations pokedexapi.LocationAreaList
-	err := json.Unmarshal(body, &locations)
-	if err != nil {
-		return pokedexapi.LocationAreaList{}, err
-	}
-	return locations, nil
 }

@@ -1,15 +1,15 @@
-package main
+package commands
 
 import (
 	"fmt"
 )
 
-func commandHelp(state *config, args []string) error {
+func commandHelp(state *config) error {
 	fmt.Println("Welcome to the Pokedex!")
 	fmt.Println("")
 	for _, command := range packageCommands {
 		// use := command.name + ": " + command.description
-		fmt.Printf("%s: %s\n", command.name, command.description)
+		fmt.Printf("%s: %s\n", command.Name, command.Description)
 	}
 
 	return nil

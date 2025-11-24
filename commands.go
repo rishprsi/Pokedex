@@ -1,7 +1,7 @@
 package main
 
 type (
-	Callback   func(*config) error
+	Callback   func(*config, []string) error
 	cliCommand struct {
 		name        string
 		description string
@@ -32,6 +32,16 @@ func initCommands() map[string]cliCommand {
 			name:        "map",
 			description: "Provides the next 20 location areas in Pokemon world",
 			callback:    commandMapb,
+		},
+		"explore": {
+			name:        "explore",
+			description: "Takes a name of location and returns a list of Pokemon located there",
+			callback:    commandExplore,
+		},
+		"catch": {
+			name:        "catch",
+			description: "Takes a name of a pokemon and returns if you caught that pokemon",
+			callback:    commandCatch,
 		},
 	}
 	packageCommands = commands

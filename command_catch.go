@@ -15,6 +15,22 @@ type Pokemon struct {
 	Order          int              `json:"order"`
 	Weight         int              `json:"weight"`
 	Abilities      []map[string]any `json:"abilties"`
+	Stats          []PokeStat       `json:"stats"`
+	Types          []PokeType       `json:"types"`
+}
+
+type PokeStat struct {
+	BaseStat int        `json:"base_stat"`
+	Stat     NameStruct `json:"stat"`
+}
+
+type PokeType struct {
+	Type NameStruct `json:"type"`
+}
+
+type NameStruct struct {
+	Name string `json:"name"`
+	URL  string `json:"url"`
 }
 
 func commandCatch(state *config, args []string) error {
@@ -37,6 +53,19 @@ func commandCatch(state *config, args []string) error {
 		fmt.Printf("%s was caught!\n", pokemon.Name)
 	} else {
 		fmt.Printf("%s escaped!\n", pokemon.Name)
+	}
+	return nil
+}
+
+func commandInspect(state *config, args []string) error {
+	if len(args) == 0 {
+		return errors.New("usage of 'catch' command: catch pokemon_name")
+	}
+	pokemon, ok := state.Pokedex[args[0]]
+	if !ok {
+		fmt.Printf("%s is not in your Pokedex, catchEm first\n", args[0])
+	} else {
+		printPokemon(pokemon)
 	}
 	return nil
 }
@@ -64,5 +93,19 @@ func catchEmAll(baseExperience int) bool {
 		return true
 	} else {
 		return false
+	}
+}
+
+func printPokemon(pokemon Pokemon) {
+	fmt.Printf("Name: %s\n", pokemon.Name)
+	fmt.Printf("Height: %v\n", pokemon.Height)
+	fmt.Printf("Weight: %v\n", pokemon.Weight)
+	fmt.Println("Stats:")
+	for _, stat := range pokemon.Stats {
+		fmt.Printf("  --%s: %v\n", stat.Stat.Name, stat.BaseStat)
+	}
+	fmt.Println("Types:")
+	for _, typ := range pokemon.Types {
+		fmt.Printf("  -- %s\n", typ.Type.Name)
 	}
 }

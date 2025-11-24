@@ -43,6 +43,11 @@ func initCommands() map[string]cliCommand {
 			description: "Takes a name of a pokemon and returns if you caught that pokemon",
 			callback:    commandCatch,
 		},
+		"inspect": {
+			name:        "inspect",
+			description: "Takes a name of a Pokemon and provides the stats if it exists in the Pokedex",
+			callback:    commandInspect,
+		},
 	}
 	packageCommands = commands
 	return commands
